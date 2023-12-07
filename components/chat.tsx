@@ -15,13 +15,15 @@ import { usePathname, useRouter } from "next/navigation";
 export interface ChatProps extends React.ComponentProps<"div"> {
   initialMessages?: Message[];
   id?: string;
+  surveyId?: string;
 }
 
-export function Chat({ id, initialMessages, className }: ChatProps) {
+export function Chat({ id, surveyId, initialMessages, className }: ChatProps) {
   const router = useRouter();
   const path = usePathname();
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
+      api: `/api/chat/${surveyId}`,
       initialMessages,
       id,
       body: {
@@ -32,12 +34,12 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           toast.error(response.statusText);
         }
       },
-      onFinish() {
-        if (!path.includes("chat")) {
-          router.push(`/chat/${id}`, { shallow: true, scroll: false });
-          router.refresh();
-        }
-      },
+      // onFinish() {
+      //   if (!path.includes("chat")) {
+      //     router.push(`/chat/${id}`, { shallow: true, scroll: false });
+      //     router.refresh();
+      //   }
+      // },
     });
   return (
     <>

@@ -11,11 +11,11 @@ const openai = new OpenAI({
 })
 
 export async function POST(req: Request) {
+  const url = new URL(req.url);
+  const params = url.pathname.split('/');
+  const surveyId = params[params.length - 1];
   const json = await req.json()
   var { messages } = json
-  console.log("Received request", messages)
-  console.log("Messafe length", messages.length)
-
 
   const res = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
@@ -32,6 +32,7 @@ export async function POST(req: Request) {
       const path = `/chat/${id}`
       const payload = {
         id,
+        surveyId,
         title,
         createdAt,
         path,
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
         ]
       }
       await kv.hmset(`chat:${id}`, payload)
-      await kv.zadd(`user:chat`, {
+      await kv.zadd(`user:chat:${surveyId}`, {
         score: createdAt,
         member: `chat:${id}`
       })

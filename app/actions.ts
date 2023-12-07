@@ -6,11 +6,11 @@ import { kv } from '@vercel/kv'
 
 import { type Chat } from '@/lib/types'
 
-export async function getChats() {
+export async function getChats({ surveyId }: { surveyId: string }) {
 
   try {
     const pipeline = kv.pipeline()
-    const chats: string[] = await kv.zrange(`user:chat`, 0, -1, {
+    const chats: string[] = await kv.zrange(`user:chat:${surveyId}`, 0, -1, {
       rev: true
     })
 
@@ -44,10 +44,8 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
   return revalidatePath(path)
 }
 
-export async function clearChats() {
-
-
-  const chats: string[] = await kv.zrange(`user:chat`, 0, -1)
+export async function clearChats({ surveyId }: { surveyId: string }) {
+  const chats: string[] = await kv.zrange(`user:chat:${surveyId}`, 0, -1)
   if (!chats.length) {
     return redirect('/')
   }
