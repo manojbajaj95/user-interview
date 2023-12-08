@@ -13,12 +13,19 @@ import { toast } from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 
 export interface ChatProps extends React.ComponentProps<"div"> {
-  initialMessages?: Message[];
   id?: string;
   surveyId?: string;
+  initialMessages?: Message[];
+  readonly?: boolean;
 }
 
-export function Chat({ id, surveyId, initialMessages, className }: ChatProps) {
+export function Chat({
+  id,
+  surveyId,
+  initialMessages,
+  readonly,
+  className,
+}: ChatProps) {
   const router = useRouter();
   const path = usePathname();
   const { messages, append, reload, stop, isLoading, input, setInput } =
@@ -53,16 +60,20 @@ export function Chat({ id, surveyId, initialMessages, className }: ChatProps) {
           <EmptyScreen setInput={setInput} />
         )}
       </div>
-      <ChatPanel
-        id={id}
-        isLoading={isLoading}
-        stop={stop}
-        append={append}
-        reload={reload}
-        messages={messages}
-        input={input}
-        setInput={setInput}
-      />
+      {readonly ? (
+        <></>
+      ) : (
+        <ChatPanel
+          id={id}
+          isLoading={isLoading}
+          stop={stop}
+          append={append}
+          reload={reload}
+          messages={messages}
+          input={input}
+          setInput={setInput}
+        />
+      )}
     </>
   );
 }

@@ -10,9 +10,7 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
       {/* <SidebarProvider> */}
-      {/* <TooltipProvider> */}
-      {children}
-      {/* </TooltipProvider> */}
+      <TooltipProvider>{children}</TooltipProvider>
       {/* </SidebarProvider> */}
     </NextThemesProvider>
   );
