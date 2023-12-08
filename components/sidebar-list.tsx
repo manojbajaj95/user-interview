@@ -5,16 +5,16 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cache } from "react";
 
 interface SidebarListProps {
-  userId?: string;
+  surveyId: string;
   children?: React.ReactNode;
 }
 
-const loadChats = cache(async () => {
-  return await getChats();
+const loadChats = cache(async (surveyId: string) => {
+  return await getChats({ surveyId });
 });
 
-export async function SidebarList({ userId }: SidebarListProps) {
-  const chats = await loadChats();
+export async function SidebarList({ surveyId }: SidebarListProps) {
+  const chats = await loadChats(surveyId);
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
@@ -31,7 +31,10 @@ export async function SidebarList({ userId }: SidebarListProps) {
       </div>
       <div className="flex items-center justify-between p-4">
         <ThemeToggle />
-        <ClearHistory clearChats={clearChats} isEnabled={chats?.length > 0} />
+        {/* <ClearHistory
+          clearChats={() => clearChats({ surveyId })}
+          isEnabled={chats?.length > 0}
+        /> */}
       </div>
     </div>
   );

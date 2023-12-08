@@ -1,6 +1,7 @@
 import { nanoid } from "@/lib/utils";
 import { Chat } from "@/components/chat";
 import type { Message } from "ai";
+import { notFound } from "next/navigation";
 
 export interface SurveyStartPageProps {
   params: {
@@ -62,8 +63,10 @@ const generateSystemMessages = (surveyId: string) => {
 
 export default async function Index({ params }: SurveyStartPageProps) {
   const id = nanoid();
-  const surveyId = params.id;
+  let surveyId = params?.id;
+  if (surveyId === undefined) {
+    return notFound();
+  }
   const systemMessages = generateSystemMessages(surveyId);
-  console.log(systemMessages);
   return <Chat id={id} initialMessages={systemMessages} surveyId={surveyId} />;
 }
