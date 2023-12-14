@@ -5,16 +5,12 @@ import { IconArrowRight } from "@/components/ui/icons";
 
 const exampleMessages = [
   {
-    heading: "Explain technical concepts",
-    message: `What is a "serverless function"?`,
+    heading: "Lets Start",
+    message: `Lets Start.`,
   },
   {
-    heading: "Summarize an article",
-    message: "Summarize the following article for a 2nd grader: \n",
-  },
-  {
-    heading: "Draft an email",
-    message: `Draft an email to my boss about the following: \n`,
+    heading: "No thanks",
+    message: `Maybe later.`,
   },
 ];
 
@@ -30,7 +26,7 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, "setInput">) {
           The goal of the interviewer is to understand how you conduct user
           interviews and gather feedback.
         </p>
-        {/* <div className="mt-4 flex flex-col items-start space-y-2">
+        <div className="mt-4 flex flex-col items-start space-y-2">
           {exampleMessages.map((message, index) => (
             <Button
               key={index}
@@ -42,7 +38,7 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, "setInput">) {
               {message.heading}
             </Button>
           ))}
-        </div> */}
+        </div>
       </div>
     </div>
   );

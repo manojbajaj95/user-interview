@@ -11,6 +11,7 @@ import { ChatScrollAnchor } from "@/components/chat-scroll-anchor";
 
 import { toast } from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 export interface ChatProps extends React.ComponentProps<"div"> {
   id?: string;
@@ -26,6 +27,7 @@ export function Chat({
   readonly,
   className,
 }: ChatProps) {
+  const [first, setFirst] = useState(true);
   const router = useRouter();
   const path = usePathname();
   const { messages, append, reload, stop, isLoading, input, setInput } =
@@ -40,13 +42,14 @@ export function Chat({
         if (response.status === 401) {
           toast.error(response.statusText);
         }
+        setFirst(false);
       },
-      // onFinish() {
-      //   if (!path.includes("chat")) {
-      //     router.push(`/chat/${id}`, { shallow: true, scroll: false });
-      //     router.refresh();
-      //   }
-      // },
+      onFinish() {
+        // if (!path.includes("chat")) {
+        //   router.push(`/chat/${id}`, { shallow: true, scroll: false });
+        //   router.refresh();
+        // }
+      },
     });
   return (
     <>
@@ -57,9 +60,10 @@ export function Chat({
             <ChatScrollAnchor trackVisibility={isLoading} />
           </>
         ) : (
-          <EmptyScreen setInput={setInput} />
+          <></>
         )}
       </div>
+      {first && <EmptyScreen setInput={setInput} />}
       {readonly ? (
         <></>
       ) : (
