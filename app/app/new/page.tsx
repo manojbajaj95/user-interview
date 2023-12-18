@@ -1,4 +1,4 @@
 export default async function ChatLayout() {
-  // Show created surveys here
+  // Create new survey here
   return <div>Hi</div>;
 }

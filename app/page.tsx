@@ -1,5 +1,5 @@
 import { AnimatedTitle, RedoAnimText } from "@/components/animated-title";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
@@ -22,7 +22,10 @@ export default function Example() {
         <div className="text-center">
           <AnimatedTitle />
           <RedoAnimText />
-          <p className="mt-6 text-lg leading-8 text-gray-300">Powered by GPT</p>
+          <p className="mt-6 text-lg leading-8 text-gray-300">
+            Platform to conduct better user interviews, moderated by an AI but
+            feels like human. Now you can conduct user interviews at scale.
+          </p>
           <form className="animate-in" action={waitlist}>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Input type="email" name="email" placeholder="Enter your email" />
