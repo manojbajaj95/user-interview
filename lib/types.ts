@@ -2,12 +2,18 @@ import { type Message } from 'ai'
 
 export interface Chat extends Record<string, any> {
   id: string
+  surveyId: string
   title: string
   createdAt: Date
-  userId: string
-  path: string
   messages: Message[]
-  sharePath?: string
+}
+
+export type Survey = {
+  id: string
+  name: string
+  description: string
+  systemPrompt: string
+  opener: string
 }
 
 export type ServerActionResult<Result> = Promise<

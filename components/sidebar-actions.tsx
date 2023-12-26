@@ -30,11 +30,7 @@ interface SidebarActionsProps {
   shareChat: (id: string) => ServerActionResult<Chat>;
 }
 
-export function SidebarActions({
-  chat,
-  removeChat,
-  shareChat,
-}: SidebarActionsProps) {
+export function SidebarActions({ chat, removeChat }: SidebarActionsProps) {
   const router = useRouter();
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [shareDialogOpen, setShareDialogOpen] = React.useState(false);

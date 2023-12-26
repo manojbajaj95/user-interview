@@ -29,13 +29,11 @@ export async function POST(req: Request) {
       const title = json.messages[0].content.substring(0, 100)
       const id = json.id ?? nanoid()
       const createdAt = Date.now()
-      const path = `app/${surveyId}/chat/${id}`
       const payload = {
         id,
         surveyId,
         title,
         createdAt,
-        path,
         messages: [
           ...messages,
           {

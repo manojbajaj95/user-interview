@@ -29,13 +29,6 @@ export async function SidebarList({ surveyId }: SidebarListProps) {
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between p-4">
-        <ThemeToggle />
-        {/* <ClearHistory
-          clearChats={() => clearChats({ surveyId })}
-          isEnabled={chats?.length > 0}
-        /> */}
-      </div>
     </div>
   );
 }

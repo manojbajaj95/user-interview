@@ -31,9 +31,9 @@ export async function middleware(req: NextRequest) {
   // }
 
   // if user is not signed in and the current path is not / redirect the user to /
-  // if (!user && req.nextUrl.pathname !== '/') {
-  //   return NextResponse.redirect(new URL('/', request.url))
-  // }
+  if (!user && req.nextUrl.pathname.startsWith("/app")) {
+    return NextResponse.redirect(new URL('/auth/login?message=Please login to continue', req.url))
+  }
 
   return res
 }

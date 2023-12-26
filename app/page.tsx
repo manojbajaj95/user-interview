@@ -1,41 +1,33 @@
-import { AnimatedTitle, RedoAnimText } from "@/components/animated-title";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
+import About from "@/components/landing/about";
+import Hero from "@/components/landing/hero";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
+import { buttonVariants } from "@/components/ui/button";
+import { MainNav } from "@/config/site";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function Example() {
-  const waitlist = async (formData: FormData) => {
-    "use server";
-    console.log("waitlist");
-    const email = formData.get("email") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { error } = await supabase.from("waitlist").insert({ email });
-    console.log(error);
-  };
-
   return (
-    <div>
-      <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-        <div className="text-center">
-          <AnimatedTitle />
-          <RedoAnimText />
-          <p className="mt-6 text-lg leading-8 text-gray-300">
-            Platform to conduct better user interviews, moderated by an AI but
-            feels like human. Now you can conduct user interviews at scale.
-          </p>
-          <form className="animate-in" action={waitlist}>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Input type="email" name="email" placeholder="Enter your email" />
-              <Button variant="default" type="submit">
-                Signup for early access
-              </Button>
-            </div>
-          </form>
+    <div className="flex min-h-screen flex-col">
+      <header className="container z-40 bg-background">
+        <div className="flex h-20 items-center justify-between py-6">
+          <Header items={MainNav} />
+          <nav>
+            <Link
+              href="/auth/login"
+              className={cn(
+                buttonVariants({ variant: "secondary", size: "sm" })
+              )}
+            >
+              Login
+            </Link>
+          </nav>
         </div>
-      </div>
+      </header>
+      <Hero />
+      <About />
+      <Footer />
     </div>
   );
 }

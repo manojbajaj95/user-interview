@@ -1,3 +1,4 @@
+import { siteConfig } from "@/config/site";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
@@ -6,9 +7,42 @@ const defaultUrl = process.env.VERCEL_URL
   : "http://localhost:3000";
 
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Conduct better user interviews",
-  description: "Powered by Generative AI",
+  metadataBase: new URL("https://acme.com"),
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: ["Mom Test", "user Interview"],
+  authors: [
+    {
+      name: "mbajaj",
+      url: "https://manojbajaj95.vercel.app/",
+    },
+  ],
+  creator: "mbajaj",
+
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [`${siteConfig.url}/og.jpg`],
+    creator: "@mbajaj",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: `${siteConfig.url}/site.webmanifest`,
 };
 
 export default function RootLayout({

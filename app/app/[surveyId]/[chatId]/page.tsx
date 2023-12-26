@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getChat } from "@/app/actions";
 
 export default async function Index({ params }: any) {
-  const id = params?.id;
+  const id = params?.chatId;
 
   const chat = await getChat(id);
   if (!chat) {
