@@ -12,7 +12,9 @@ export type Survey = {
   id: string
   name: string
   description: string
-  systemPrompt: string
+  problem: string
+  goal: string
+  about: string
   opener: string
 }
 

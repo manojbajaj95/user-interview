@@ -1,19 +1,24 @@
 import Link from "next/link";
 import { getSurveys } from "../actions";
 import { nanoid } from "@/lib/utils";
-
-const loadSurveys = async () => {
-  const surveys = await getSurveys();
-  return surveys;
-};
+import { buttonVariants } from "@/components/ui/button";
+import { Typography } from "@/components/ui/typography";
 
 export default async function ChatLayout() {
-  const surveys = await loadSurveys();
+  const surveys = await getSurveys();
+  console.log(surveys);
   const id = nanoid();
   return (
-    <>
-      <Link href={`/app/${id}?mode=create`}>Create new Survey</Link>
-      <p>Your surveys</p>
+    <div className="container max-w-2xl p-2">
+      <Typography variant="h2" as="div" className="flex">
+        <div className="grow">Your surveys</div>
+        <Link
+          className={buttonVariants({ variant: "default" })}
+          href={`/app/${id}?mode=create`}
+        >
+          + Create New Survey
+        </Link>
+      </Typography>
       <ul>
         {surveys.map((s) => {
           return (
@@ -23,6 +28,6 @@ export default async function ChatLayout() {
           );
         })}
       </ul>
-    </>
+    </div>
   );
 }

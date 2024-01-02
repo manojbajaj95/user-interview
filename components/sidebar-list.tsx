@@ -1,7 +1,5 @@
 import { clearChats, getChats } from "@/app/actions";
-import { ClearHistory } from "@/components/clear-history";
 import { SidebarItems } from "@/components/sidebar-items";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { cache } from "react";
 
 interface SidebarListProps {
@@ -10,7 +8,7 @@ interface SidebarListProps {
 }
 
 const loadChats = cache(async (surveyId: string) => {
-  return await getChats({ surveyId });
+  return await getChats(surveyId);
 });
 
 export async function SidebarList({ surveyId }: SidebarListProps) {

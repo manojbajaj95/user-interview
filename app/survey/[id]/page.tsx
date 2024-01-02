@@ -2,6 +2,8 @@ import { nanoid } from "@/lib/utils";
 import { Chat } from "@/components/chat";
 import type { Message } from "ai";
 import { notFound } from "next/navigation";
+import { getSurvey } from "@/app/actions";
+import { Survey } from "@/lib/types";
 
 export interface SurveyStartPageProps {
   params: {
@@ -9,51 +11,33 @@ export interface SurveyStartPageProps {
   };
 }
 
-const spreadsheets = `Product:
-Spreadsheets: Modern spreadsheets with live data connectivity.
-
-Example Questions
-- How often do you use spreadsheets
-- Do you use excel or google sheets
-- How do they collaborate with other team members
-- What are typical use cases where spreadsheets are used
-
-Objective:
-Signup for waitlist. Ask for email at the end.
-`;
-
-const interviews = `Product:
-Interviews: Conduct in depth user interviews with chatbots.
-Example questions:
-- How do you conduct user interviews today?
-- Do you use any tools like feedback forms?
-- How do you validate the results?
-- What are the challenges you face?
-
-Objective:
-Ask user to sign up for waitlist. Ask for the user email.
-`;
-
-const generateSystemMessages = (surveyId: string) => {
-  var survey = "";
-  if (surveyId === "spreadsheets") {
-    survey = spreadsheets;
-  } else if (surveyId === "interviews") {
-    survey = interviews;
-  }
+const generateSystemMessages = (survey: Survey) => {
   const systemMessages: Message[] = [
     {
       content: `
-      You are a bot that conducts user interviews. You are friendly and approachable. You are a good listener. You are a good conversationalist.
-      You specializes in conducting relaxed and friendly user interviews. You start by welcoming users and engaging them in conversations about their experiences, including specific usage scenarios, features they find useful, features they need and their overall satisfaction. The bot avoids sensitive or overly technical questions, maintaining a comfortable interview environment. You should ask only one question at a time. It concludes interviews by thanking users and introducing the product. Then it should try to achieve the objective. The bot's approachable style makes it ideal for gathering valuable insights on product usage.
-      ${survey}
+      You specialize in conducting relaxed and friendly user interviews. You are friendly and approachable. You are a good listener.
+      You should avoid sensitive or overly technical questions, maintaining a comfortable interview environment. 
+      You should ask only one question at a time. You will be penalized if there is more than one followup question.
+      You should remain neutral about topic.
+      You should probe for deeper insights and use follow-up questions to clarify and explore further.
+      You should ask open-ended questions. You should encourage detailed responses and avoid leading or biased questions.
+      You should follow best practices mentioned in "The Moms Test" for talking to potential customers.
+      You should start the conversation with friendly greeting and introdution about you.
+      You should explicitly mention the purpose of the conversation.
+      You can start the problem by asking how the ycurrently solve the problem.
+      You should probe the willingness to pay for the solution.
+      You should thank participants in the end, express gratitude for their time and contributions.
+      At the end you should ask for contact information, email or phone if they are willing to be contacted for further discussion.
+      
+      About You: ${survey.about}
+      Problem: ${survey.problem}
+      Goal: ${survey.goal}
       `,
       role: "system",
       id: nanoid(),
     },
     {
-      content:
-        "Hello! Thank you for taking the time to chat with me. Are you ready to get started?",
+      content: survey.opener,
       role: "assistant",
       id: nanoid(),
     },
@@ -67,6 +51,12 @@ export default async function Index({ params }: SurveyStartPageProps) {
   if (surveyId === undefined) {
     return notFound();
   }
-  const systemMessages = generateSystemMessages(surveyId);
+  const survey = await getSurvey(surveyId);
+  if (!survey) {
+    return notFound();
+  }
+
+  const systemMessages = generateSystemMessages(survey);
+
   return <Chat id={id} initialMessages={systemMessages} surveyId={surveyId} />;
 }

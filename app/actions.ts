@@ -56,7 +56,7 @@ export async function getSurvey(surveyId: string) {
   return survey
 }
 
-export async function getChats({ surveyId }: { surveyId: string }) {
+export async function getChats(surveyId: string) {
 
   try {
     const pipeline = kv.pipeline()

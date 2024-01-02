@@ -1,123 +1,71 @@
-import { headers, cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  Card,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { UserAuthForm } from "@/components/user-auth-form";
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
-  const signIn = async (formData: FormData) => {
-    "use server";
-
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      var message = "Error in sign In";
-      if (error?.status == 400) {
-        message = "Invalid Credentials. Please try again";
-      }
-      console.log(error);
-      return redirect(`/auth/login?message=${message}`);
-    }
-
-    return redirect("/app");
-  };
-
-  const signUp = async (formData: FormData) => {
-    "use server";
-
-    const origin = headers().get("origin");
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      return redirect("/login?message=Could not authenticate user");
-    }
-
-    return redirect("/login?message=Check email to continue sign in process");
-  };
-  const message = searchParams.message;
+export default function AuthenticationPage() {
   return (
-    <main className="flex items-center justify-center h-screen ">
-      <Card className="w-full max-w-md mx-4">
-        <form action={signIn}>
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">
-              Welcome Back!
-            </CardTitle>
-            <CardDescription className="text-center">
-              Please enter your credentials to login.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label className="group" htmlFor="email">
-                Email Address
-              </Label>
-              <Input
-                className="transition-all group-hover:underline"
-                id="email"
-                placeholder="yourname@example.com"
-                required
-                type="email"
-                name="email"
-              />
+    <>
+      <div className="md:hidden">
+        <Image
+          src="/examples/authentication-light.png"
+          width={1280}
+          height={843}
+          alt="Authentication"
+          className="block dark:hidden"
+        />
+        <Image
+          src="/examples/authentication-dark.png"
+          width={1280}
+          height={843}
+          alt="Authentication"
+          className="hidden dark:block"
+        />
+      </div>
+      <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+          <div className="absolute inset-0 bg-zinc-900" />
+          <div className="relative z-20 mt-auto">
+            <blockquote className="space-y-2">
+              <p className="text-lg">
+                &ldquo;This library has saved me countless hours of work and
+                helped me deliver stunning designs to my clients faster than
+                ever before.&rdquo;
+              </p>
+              <footer className="text-sm">Sofia Davis</footer>
+            </blockquote>
+          </div>
+        </div>
+        <div className="lg:p-8">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="flex flex-col space-y-2 text-center">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Create an account
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Enter your email below to create your account
+              </p>
             </div>
-            <div className="space-y-2">
-              <Label className="group" htmlFor="password">
-                Password
-              </Label>
-              <Input
-                className="transition-all group-hover:underline"
-                id="password"
-                name="password"
-                required
-                type="password"
-              />
-            </div>
-          </CardContent>
-          {message && <p>{message}</p>}
-          <CardFooter className="flex justify-between items-center">
-            <Link className="text-sm text-blue-600 hover:underline" href="#">
-              Forgot password?
-            </Link>
-            <Button className="w-32" type="submit">
-              Login
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
-    </main>
+            <UserAuthForm />
+            <p className="px-8 text-center text-sm text-muted-foreground">
+              By clicking continue, you agree to our{" "}
+              <Link
+                href="/terms"
+                className="underline underline-offset-4 hover:text-primary"
+              >
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="/privacy"
+                className="underline underline-offset-4 hover:text-primary"
+              >
+                Privacy Policy
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

@@ -1,13 +1,10 @@
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+import { createAbsoluteUrl } from "@/lib/utils";
 
 export const metadata = {
-  metadataBase: new URL("https://acme.com"),
+  metadataBase: new URL(createAbsoluteUrl("/")),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,

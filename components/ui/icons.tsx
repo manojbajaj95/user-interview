@@ -15,7 +15,6 @@ import {
   Image,
   Laptop,
   Loader2,
-  LucideProps,
   Moon,
   MoreVertical,
   Pizza,
@@ -26,6 +25,7 @@ import {
   Twitter,
   User,
   X,
+  Github,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";

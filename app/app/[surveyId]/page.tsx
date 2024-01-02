@@ -9,10 +9,15 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { addSurvey, getSurvey } from "@/app/actions";
 import { type Survey } from "@/lib/types";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { RWebShare } from "react-web-share";
+import { ShareButton } from "@/components/web-share";
+import { Typography } from "@/components/ui/typography";
+import { createAbsoluteUrl } from "@/lib/utils";
 
 type mode = "view" | "create" | "edit";
 
@@ -27,15 +32,19 @@ async function SurveyForm({
     "use server";
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
-    const system = formData.get("system") as string;
+    const problem = formData.get("problem") as string;
     const opener = formData.get("opener") as string;
+    const goal = formData.get("goal") as string;
+    const about = formData.get("about") as string;
 
     const survey = {
       id: surveyId,
-      name: name,
-      description: description,
-      systemPrompt: system,
-      opener: opener,
+      name,
+      description,
+      opener,
+      problem,
+      goal,
+      about,
     } as Survey;
     await addSurvey(survey);
     redirect("/app");
@@ -43,12 +52,23 @@ async function SurveyForm({
 
   const survey: Survey | null = await getSurvey(surveyId);
   return (
-    <Card className="w-full mx-auto p-6 shadow-lg rounded-xl h-screen">
+    <Card className="w-full mx-auto p-6 shadow-lg rounded-xl min-h-screen">
       <form action={createSurvey}>
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold">
-            {mode == "edit" ? "Update" : "Create"} Survey
-          </CardTitle>
+          <div className="flex">
+            <CardTitle className="text-2xl font-semibold grow">
+              {mode == "edit" ? "Update" : "Create"} Survey
+            </CardTitle>
+
+            <Link
+              className={buttonVariants({ variant: "default" })}
+              href={createAbsoluteUrl(`/survey/${surveyId}`)}
+            >
+              Try Survey
+            </Link>
+            <ShareButton surveyId={surveyId} />
+          </div>
+
           <CardDescription className="text-gray-500">
             Enter the necessary details below.
           </CardDescription>
@@ -74,19 +94,37 @@ async function SurveyForm({
               />
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="system-prompt">System Prompt</Label>
+              <Label htmlFor="problem">Problem Statement</Label>
               <Textarea
-                id="system-prompt"
-                placeholder="Enter system prompt"
-                name="system"
-                defaultValue={survey ? survey.systemPrompt : undefined}
+                id="problem"
+                placeholder="Enter the problem statement"
+                name="problem"
+                defaultValue={survey ? survey.problem : undefined}
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="goal">Goal of conversation</Label>
+              <Textarea
+                id="goal"
+                placeholder="Enter the problem statement"
+                name="goal"
+                defaultValue={survey ? survey.goal : undefined}
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="about">About You</Label>
+              <Textarea
+                id="about"
+                placeholder="Enter a brief description about you. It helps buiding rapport and gather trust."
+                name="about"
+                defaultValue={survey ? survey.about : undefined}
               />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="opener">Opener</Label>
               <Textarea
                 id="opener"
-                placeholder="Enter opener"
+                placeholder="Enter an opening for your customer interview"
                 name="opener"
                 defaultValue={survey ? survey.opener : undefined}
               />
@@ -114,10 +152,15 @@ export default async function Survey({
   const mode = searchParams.mode;
   // Show created surveys here
   if (!mode) {
-    return <div>Click on chat in sidebar to review it</div>;
+    return (
+      <Typography variant="h2">
+        View responses by clicking on sidebar
+      </Typography>
+    );
   }
   return (
     <>
+      <p>{}</p>
       <SurveyForm mode={mode} surveyId={params.surveyId} />
     </>
   );
