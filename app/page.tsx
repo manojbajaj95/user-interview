@@ -20,13 +20,15 @@ export default function Example() {
                 buttonVariants({ variant: "secondary", size: "sm" })
               )}
             >
-              Login
+              Get Started
             </Link>
           </nav>
         </div>
       </header>
-      <Hero />
-      <About />
+      <main>
+        <Hero />
+        <About />
+      </main>
       <Footer />
     </div>
   );

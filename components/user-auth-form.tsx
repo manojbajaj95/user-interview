@@ -7,6 +7,7 @@ import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { createClient } from "@/utils/supabase/client";
 import { Typography } from "@/components/ui/typography";
+import { IconGoogle } from "./ui/icons";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
@@ -77,8 +78,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       </div>
 
       <Button variant="outline" type="button" onClick={handleSignInWithGoogle}>
-        <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" />
-        Sign In with Google
+        <IconGoogle /> Sign In with Google
       </Button>
     </div>
   );

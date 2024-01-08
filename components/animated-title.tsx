@@ -55,7 +55,6 @@ export function AnimatedTitle() {
   return (
     <Typography variant="h1" aria-label={baseText} role="heading">
       <motion.span>{displayText}</motion.span>
-      <CursorBlinker />
     </Typography>
   );
 }

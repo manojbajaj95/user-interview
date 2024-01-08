@@ -6,17 +6,6 @@ import { createClient } from "@/utils/supabase/server";
 import { Typography } from "../ui/typography";
 
 export default function Hero() {
-  const waitlist = async (formData: FormData) => {
-    "use server";
-    console.log("waitlist");
-    const email = formData.get("email") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { error } = await supabase.from("waitlist").insert({ email });
-    console.log(error);
-  };
-
   return (
     <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
       <div className="text-center">
@@ -30,15 +19,29 @@ export default function Hero() {
           Platform to conduct better user interviews, moderated by an AI but
           feels like human. Now you can conduct user interviews at scale.
         </Typography>
-        <form className="animate-in" action={waitlist}>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Input type="email" name="email" placeholder="Enter your email" />
-            <Button variant="default" type="submit">
-              Signup for early access
-            </Button>
-          </div>
-        </form>
+        <WaitlistForm />
       </div>
     </div>
+  );
+}
+function WaitlistForm() {
+  const waitlist = async (formData: FormData) => {
+    "use server";
+    console.log("waitlist");
+    const email = formData.get("email") as string;
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { error } = await supabase.from("waitlist").insert({ email });
+  };
+  return (
+    <form className="animate-in" action={waitlist}>
+      <div className="mt-10 flex items-center justify-center gap-x-6">
+        <Input type="email" name="email" placeholder="Enter your email" />
+        <Button variant="default" type="submit">
+          Signup for early access
+        </Button>
+      </div>
+    </form>
   );
 }

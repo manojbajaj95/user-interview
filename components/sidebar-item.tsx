@@ -21,19 +21,15 @@ import { cn } from "@/lib/utils";
 interface SidebarItemProps {
   index: number;
   chat: Chat;
-  children: React.ReactNode;
 }
 
 const createPath = (surveyId: string, chatId: string) => {
   return `/app/${surveyId}/${chatId}`;
 };
 
-export function SidebarItem({ index, chat, children }: SidebarItemProps) {
-  const pathname = usePathname();
-
-  const isActive = pathname === chat.path;
+export function SidebarItem({ index, chat }: SidebarItemProps) {
   const [newChatId, setNewChatId] = useLocalStorage("newChatId", null);
-  const shouldAnimate = index === 0 && isActive && newChatId;
+  const shouldAnimate = index === 0 && newChatId;
 
   if (!chat?.id) return null;
 
@@ -58,26 +54,13 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
       }}
     >
       <div className="absolute left-2 top-1 flex h-6 w-6 items-center justify-center">
-        {chat.sharePath ? (
-          <Tooltip delayDuration={1000}>
-            <TooltipTrigger
-              tabIndex={-1}
-              className="focus:bg-muted focus:ring-1 focus:ring-ring"
-            >
-              <IconUsers className="mr-2" />
-            </TooltipTrigger>
-            <TooltipContent>This is a shared chat.</TooltipContent>
-          </Tooltip>
-        ) : (
-          <IconMessage className="mr-2" />
-        )}
+        <IconMessage className="mr-2" />
       </div>
       <Link
         href={createPath(chat.surveyId, chat.id)}
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10",
-          isActive && "bg-zinc-200 pr-16 font-semibold dark:bg-zinc-800"
+          "group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10"
         )}
       >
         <div
@@ -122,7 +105,6 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
           </span>
         </div>
       </Link>
-      {isActive && <div className="absolute right-2 top-1">{children}</div>}
     </motion.div>
   );
 }

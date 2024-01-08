@@ -153,9 +153,13 @@ export default async function Survey({
   // Show created surveys here
   if (!mode) {
     return (
-      <Typography variant="h2">
-        View responses by clicking on sidebar
-      </Typography>
+      <div className="flex h-screen">
+        <div className="m-auto">
+          <Typography variant="h3" className="align-center m-2">
+            View survey responses by clicking on sidebar
+          </Typography>
+        </div>
+      </div>
     );
   }
   return (
